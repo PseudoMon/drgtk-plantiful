@@ -4,6 +4,10 @@ def create_watering_can args
   template = WATERING_CAN
   hovered = args.inputs.mouse.inside_rect?(template)
 
+  if hovered
+    template = template.merge({ y: template.y + 20 })
+  end
+
   if hovered and args.inputs.mouse.click and not args.state.is_paused
     cursor_state = args.state.cursor_state
     
@@ -25,6 +29,10 @@ end
 def create_seed_bag args
   template = SEED_BAG
   hovered = args.inputs.mouse.inside_rect?(template)
+
+  if hovered
+    template = template.merge({ y: template.y + 20 })
+  end
 
   if hovered and args.inputs.mouse.click and not args.state.is_paused
     cursor_state = args.state.cursor_state
@@ -67,17 +75,19 @@ def create_pause_button args
   end
 end
 
-def create_pots 
+def create_pots ondead
   pots = []
   4.times do |idx|
     pot = Pot.new(POT, PLANT_TEMPLATES, POT_HOVER)
     pot.place_on_shelf(SHELF_TOP, idx)
+    pot.ondead = ondead
     pots << pot
   end
 
   4.times do |idx|
     pot = Pot.new(POT, PLANT_TEMPLATES, POT_HOVER)
     pot.place_on_shelf(SHELF_BOTTOM, idx)
+    pot.ondead = ondead
     pots << pot
   end
 

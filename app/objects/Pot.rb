@@ -30,10 +30,13 @@ class Pot
 		@g = 255
 
 		@is_hovered = true
+
+		# This should be a proc 
+		@ondead = nil
 	end
 
-	def plant_growth
-		return @plant_growth
+	def ondead=(value)
+		@ondead = value 
 	end
 
 	def place_on_shelf shelf, idx
@@ -119,7 +122,14 @@ class Pot
 		if @to_wilted > 0
 			@to_wilted -= 1
 		else
-			self.remove_plant 
+			self.wilt
+		end
+	end
+
+	def wilt
+		self.remove_plant
+		if @ondead
+			@ondead.call(@x, @y)
 		end
 	end
 

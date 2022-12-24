@@ -47,8 +47,26 @@ def add_score_popup args
     x: args.inputs.mouse.x,
     y: args.inputs.mouse.y + 40,
     text: "+1",
-    size_enum: 15,
+    size_enum: 24,
+    r: 106,
+    g: 165,
+    b: 58,
     a: 255,
+    font: "fonts/Mansalva-Regular.ttf",
+  }
+end
+
+def add_frowny_popup args, x, y
+  args.state.scorepopups << {
+    x: x + POT.w / 2,
+    y: y + POT.h / 2 + 20,
+    text: ":(",
+    size_enum: 24,
+    r: 255,
+    g: 50,
+    b: 50,
+    a: 255,
+    angle: 90,
     font: "fonts/Mansalva-Regular.ttf",
   }
 end
@@ -58,7 +76,9 @@ def show_pause args
 end
 
 def main_scene args
-  args.state.pots ||= create_pots()
+  args.state.pots ||= create_pots(proc do |x, y| 
+    add_frowny_popup(args, x, y)
+  end)
   pots = args.state.pots
 
   args.state.cursor_state ||= :nothing
