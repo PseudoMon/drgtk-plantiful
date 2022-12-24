@@ -4,7 +4,9 @@ class Pot
 	@@potwidth = 155
 
 	# starting counter for each phase
-	@@to_wilted_starts = [0, 9999, 8 * 60, 6 * 60, 255, 6 * 50]
+	@@to_wilted_starts = [0, 9999, 8 * 60, 6 * 60, 255, 8 * 50]
+
+	@@to_growth_starts = [0, 5 * 60, 8 * 60, 12 * 60, 15 * 60, 0]
 
 	def initialize template, plant_templates=[], dirt_template=nil
 		# template must be hash with { path, w, h }
@@ -50,9 +52,18 @@ class Pot
 		if (@plant_growth + 1 <= @max_growth)
 			@plant_growth += 1
 
-			@to_wilted = @@to_wilted_starts[@plant_growth]
-			self.reset_coloration
+			self.reset_growing_status
+			self.reset_wilting_status	
 		end
+	end
+
+	def reset_growing_status
+		@to_growth = @@to_growth_starts[@plant_growth]
+	end
+
+	def reset_wilting_status
+		@to_wilted = @@to_wilted_starts[@plant_growth]
+		self.reset_coloration
 	end
 
 	def remove_plant
@@ -74,7 +85,23 @@ class Pot
 		})
 	end
 
-	def wilt
+	def tick
+		# These things happen to this pot every tick
+		if self.is_there_plant?
+			self.closer_to_wilted
+			self.closer_to_growth
+		end
+	end
+
+	def closer_to_growth
+		if @to_growth > 0
+			@to_growth -= 1
+		else
+			self.grow_plant
+		end
+	end
+
+	def closer_to_wilted
 		if not self.is_there_plant? then return end
 
 		if @r > 0 then @r -= 0.25 end
@@ -85,9 +112,6 @@ class Pot
 			@to_wilted -= 1
 		else
 			self.remove_plant 
-			# TODO seems this always run or smth, check
-			# which process gets run in the order
-			# atm we cant plant seed at all
 		end
 	end
 

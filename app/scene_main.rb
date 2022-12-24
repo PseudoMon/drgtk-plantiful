@@ -12,7 +12,7 @@ def handle_pots_interaction args
       case args.state.cursor_state
       when :watering
         if pot.is_there_plant?
-          pot.grow_plant
+          pot.reset_wilting_status
         end
 
       when :nothing
@@ -66,7 +66,7 @@ def main_scene args
   create_seed_bag(args)
 
   # Run these process on the pots every tick
-  pots.each {|pot| pot.is_there_plant? ? pot.wilt : nil}
+  pots.each {|pot| pot.tick}
   # Render pots
   pots.each {|pot| args.outputs.sprites << pot.sprites }
 
