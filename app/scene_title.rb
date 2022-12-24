@@ -1,8 +1,16 @@
 require "app/utils.rb"
 
+LOGO = {
+  x: 640 - 200/2,
+  y: 450,
+  w: 200,
+  h: 200,
+  path: "sprites/logo.png"
+}
+
 TITLE_TEXT = { 
   x: 640, 
-  y: 570, 
+  y: 470, 
   text: "Plantiful",
   alignment_enum: 1,
   size_enum: 64,
@@ -11,7 +19,7 @@ TITLE_TEXT = {
 
 START_BUTTON = {
   x: 640,
-  y: 430,
+  y: TITLE_TEXT.y - 140,
   text: "Start",
   alignment_enum: 1,
   size_enum: 18,
@@ -19,27 +27,29 @@ START_BUTTON = {
   a: 255,
 }
 
+ABOUT_BUTTON = START_BUTTON.merge({
+  text: "About",
+  y: START_BUTTON.y - 60,
+})
+
+QUIT_BUTTON = START_BUTTON.merge({
+  text: "Quit",
+  y: START_BUTTON.y - 60,
+})
+
 def title_scene args 
-  args.state.initialized ||= false
-
-  if !args.state.initialized
-    puts "INITIALIZED"
-    args.state.initialized = true
-  end
-
-  startbox = get_label_bounding_box(args, START_BUTTON)
-  startbox_hovered = args.inputs.mouse.inside_rect?(startbox)
-
-  if startbox_hovered
-    START_BUTTON.a = 128
-  else
-    START_BUTTON.a = 255
-  end
-
-  if args.inputs.mouse.click and startbox_hovered
+  create_button(args, START_BUTTON) do
     args.state.current_scene = :Main
   end
 
+  # create_button(args, ABOUT_BUTTON) do
+  #   args.state.current_scene = :About
+  # end
+
+  create_button(args, QUIT_BUTTON) do
+    exit
+  end
+
   args.outputs.labels << TITLE_TEXT
-  args.outputs.labels << START_BUTTON
+  args.outputs.sprites << LOGO
 end
