@@ -71,8 +71,20 @@ def add_frowny_popup args, x, y
   }
 end
 
+def clear_scene args
+  args.state.pots = nil
+  args.state.cursor_state = nil
+  args.state.score = nil
+  args.state.scorepopups = nil
+  args.state.is_paused = nil
+end
+
 def show_pause args
   args.outputs.labels << PAUSE_TEXT
+  create_button(args, RETURN_TO_MENU) do
+    clear_scene(args)
+    args.state.current_scene = :Title
+  end
 end
 
 def main_scene args
@@ -90,7 +102,9 @@ def main_scene args
     handle_pots_interaction(args)
   end
 
-  handle_pots_hovering(args)
+  if not args.state.is_paused
+    handle_pots_hovering(args)
+  end
   
   # Render shelves
   args.outputs.sprites << get_centered_sprite(SHELF_TOP)
@@ -122,11 +136,13 @@ def main_scene args
     if score.a < 0 then score.a = 0 end
   end
 
-  # Show pause indicator
+  # Remove scorepopups that has already disappeared
+  args.state.scorepopups.select! {|score| score.a > 0}
+
+  # Show pause screen
+  # Note that this needs to be at the bottom because it's
+  # possible to run clear scene here
   if args.state.is_paused
     show_pause(args)
   end
-
-  # Remove scorepopups that has already disappeared
-  args.state.scorepopups.select! {|score| score.a > 0}
 end

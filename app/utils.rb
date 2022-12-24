@@ -29,7 +29,7 @@ def get_centered_sprite sprite, xcenter=true, ycenter=true
   })
 end
 
-def create_button args, template
+def create_button args, template, a_onhover=120
   # Add a button to the screen, running 
   # a block on click, if block is given
   
@@ -38,9 +38,9 @@ def create_button args, template
   label = {}.merge(template)
 
   if boundbox_hovered
-    label.a = 120
+    label.a = a_onhover
   else
-    label.a = 255
+    label.a = template.a
   end
 
   if boundbox_hovered and args.inputs.mouse.click

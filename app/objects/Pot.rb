@@ -8,13 +8,14 @@ class Pot
 
 	@@to_growth_starts = [0, 5 * 60, 8 * 60, 12 * 60, 15 * 60, 0]
 
-	def initialize template, plant_templates=[], hover_template=nil
+	def initialize template, plant_templates=[], hover_template={}, hand_template={}
 		# template must be hash with { path, w, h }
 		# plant_templates should be an array of hashes
 
 		@template = template
 		@hover_template = hover_template
 		@plant_templates = plant_templates
+		@hand_template = hand_template
 		@max_growth = plant_templates.length
 
 		@x = -template.w
@@ -33,6 +34,9 @@ class Pot
 
 		# This should be a proc 
 		@ondead = nil
+
+		@hand_y = 0 #TODO
+		@hand_goingdown = true
 	end
 
 	def ondead=(value)
@@ -102,6 +106,14 @@ class Pot
 			self.closer_to_wilted
 			self.closer_to_growth
 		end
+
+		if @hand_goingdown
+			@hand_y = @hand_y > -10 ? @hand_y - 1 : @hand_y
+			if @hand_y <= -10 then @hand_goingdown = false end
+		else
+			@hand_y = @hand_y < 10 ? @hand_y + 1 : @hand_y
+			if @hand_y >= 10 then @hand_goingdown = true end
+		end
 	end
 
 	def closer_to_growth
@@ -162,6 +174,10 @@ class Pot
 		# If there's plant growth, also show the plant
 		if @plant_growth > 0
 			sprites += [self.plant_sprite]
+		end
+
+		if @plant_growth == @max_growth
+			sprites += [@hand_template.merge({ x: @x + 80, y: @y + 200 + @hand_y })]
 		end
 
 		return sprites

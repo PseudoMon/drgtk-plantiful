@@ -2,13 +2,14 @@ require "app/utils.rb"
 
 def create_watering_can args
   template = WATERING_CAN
+  is_paused = args.state.is_paused
   hovered = args.inputs.mouse.inside_rect?(template)
 
-  if hovered
+  if hovered and not is_paused
     template = template.merge({ y: template.y + 20 })
   end
 
-  if hovered and args.inputs.mouse.click and not args.state.is_paused
+  if hovered and args.inputs.mouse.click and not is_paused
     cursor_state = args.state.cursor_state
     
     if cursor_state == :watering
@@ -28,13 +29,14 @@ end
 
 def create_seed_bag args
   template = SEED_BAG
+  is_paused = args.state.is_paused
   hovered = args.inputs.mouse.inside_rect?(template)
 
-  if hovered
+  if hovered and not is_paused
     template = template.merge({ y: template.y + 20 })
   end
 
-  if hovered and args.inputs.mouse.click and not args.state.is_paused
+  if hovered and args.inputs.mouse.click and not is_paused
     cursor_state = args.state.cursor_state
 
     if cursor_state == :seeding
@@ -56,6 +58,7 @@ def create_count_machine args
 
 end
 
+# Currently unused
 def create_reset_button args
   reset_button = BOTTOM_LEFT_BUTTON.merge({ text: "Reset" })
 
@@ -68,7 +71,8 @@ def create_reset_button args
 end
 
 def create_pause_button args
-  pause_button = BOTTOM_LEFT_BUTTON.merge({ text: "Pause" })
+  text = args.state.is_paused ? "Continue" : "Pause"
+  pause_button = BOTTOM_LEFT_BUTTON.merge({ text: text })
 
   create_button(args, pause_button) do
     args.state.is_paused = !args.state.is_paused
@@ -78,14 +82,14 @@ end
 def create_pots ondead
   pots = []
   4.times do |idx|
-    pot = Pot.new(POT, PLANT_TEMPLATES, POT_HOVER)
+    pot = Pot.new(POT, PLANT_TEMPLATES, POT_HOVER, HAND_ICON)
     pot.place_on_shelf(SHELF_TOP, idx)
     pot.ondead = ondead
     pots << pot
   end
 
   4.times do |idx|
-    pot = Pot.new(POT, PLANT_TEMPLATES, POT_HOVER)
+    pot = Pot.new(POT, PLANT_TEMPLATES, POT_HOVER, HAND_ICON)
     pot.place_on_shelf(SHELF_BOTTOM, idx)
     pot.ondead = ondead
     pots << pot

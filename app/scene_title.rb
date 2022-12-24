@@ -15,7 +15,7 @@ START_BUTTON = {
   text: "Start",
   alignment_enum: 1,
   size_enum: 18,
-  font: "fonts/Lato-Regular.ttf",
+  font: "fonts/Mansalva-Regular.ttf",
   a: 255,
 }
 
@@ -37,7 +37,7 @@ def title_scene args
   end
 
   if args.inputs.mouse.click and startbox_hovered
-    args.state.current_scene = "Main"
+    args.state.current_scene = :Main
   end
 
   args.outputs.labels << TITLE_TEXT

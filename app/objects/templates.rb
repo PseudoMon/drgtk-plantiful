@@ -17,6 +17,16 @@ PAUSE_TEXT = {
   font: "fonts/Mansalva-Regular.ttf",
 }
 
+RETURN_TO_MENU = {
+  x: 640,
+  y: 320,
+  text: "Click to quit to main menu",
+  alignment_enum: 1,
+  size_enum: 18,
+  a: 180,
+  font: "fonts/Mansalva-Regular.ttf",
+}
+
 SHELF = {
   path: "sprites/shelf.png",
   w: 825,
@@ -90,3 +100,8 @@ SEED_BAG = {
   y: SHELF_BOTTOM.y,
 }
 
+HAND_ICON = {
+  path: "sprites/hand.png",
+  w: 66,
+  h: 69,
+}
