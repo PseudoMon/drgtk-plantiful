@@ -9,11 +9,11 @@ BOTTOM_LEFT_BUTTON = {
 
 PAUSE_TEXT = { 
   x: 640, 
-  y: 420, 
+  y: 460, 
   text: "Paused",
   alignment_enum: 1,
   size_enum: 72,
-  a: 125,
+  a: 180,
   font: "fonts/Mansalva-Regular.ttf",
 }
 
@@ -37,6 +37,11 @@ PLANT_TEMPLATES = []
     h: POT.h
   }
 end
+
+POT_HOVER = POT.merge({
+  path: "sprites/pothover.png",
+  opacity: 180,
+})
 
 SHELF_TOP = SHELF.merge({
   # Pivot center

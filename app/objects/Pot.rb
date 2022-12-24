@@ -8,19 +8,17 @@ class Pot
 
 	@@to_growth_starts = [0, 5 * 60, 8 * 60, 12 * 60, 15 * 60, 0]
 
-	def initialize template, plant_templates=[], dirt_template=nil
+	def initialize template, plant_templates=[], hover_template=nil
 		# template must be hash with { path, w, h }
 		# plant_templates should be an array of hashes
-		# dirt_tempalte isn't really used for now
 
 		@template = template
-		@dirt_template = dirt_template
+		@hover_template = hover_template
 		@plant_templates = plant_templates
 		@max_growth = plant_templates.length
 
 		@x = -template.w
 		@y = -template.h
-		@contains_dirt = true
 		@plant_growth = 0
 
 		# Frames until plant will wilt and be removed
@@ -30,6 +28,8 @@ class Pot
 		@r = 255
 		@b = 255
 		@g = 255
+
+		@is_hovered = true
 	end
 
 	def plant_growth
@@ -68,6 +68,14 @@ class Pot
 
 	def remove_plant
 		@plant_growth = 0
+	end
+
+	def hover
+		@is_hovered = true
+	end
+
+	def unhover
+		@is_hovered = false
 	end
 
 	def is_plant_fully_grown?
@@ -132,7 +140,14 @@ class Pot
 	end
 
 	def sprites
-		sprites = [self.pot_sprite]
+		sprites = []
+
+		# If hovered, also show hover indicator
+		if @is_hovered
+			sprites += [@hover_template.merge({ x: @x, y: @y })]
+		end
+
+		sprites += [self.pot_sprite]
 		
 		# If there's plant growth, also show the plant
 		if @plant_growth > 0

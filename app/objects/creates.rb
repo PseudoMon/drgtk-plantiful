@@ -70,13 +70,13 @@ end
 def create_pots 
   pots = []
   4.times do |idx|
-    pot = Pot.new(POT, PLANT_TEMPLATES)
+    pot = Pot.new(POT, PLANT_TEMPLATES, POT_HOVER)
     pot.place_on_shelf(SHELF_TOP, idx)
     pots << pot
   end
 
   4.times do |idx|
-    pot = Pot.new(POT, PLANT_TEMPLATES)
+    pot = Pot.new(POT, PLANT_TEMPLATES, POT_HOVER)
     pot.place_on_shelf(SHELF_BOTTOM, idx)
     pots << pot
   end
@@ -90,8 +90,8 @@ def create_watering_mouse args
   end
 
   watering_mouse = WATERING_CAN.merge({
-    x: args.inputs.mouse.x - 32,
-    y: args.inputs.mouse.y - 20,
+    x: args.inputs.mouse.x,
+    y: args.inputs.mouse.y - 50,
     angle: 30,
   })
 

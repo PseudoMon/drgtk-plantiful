@@ -32,6 +32,16 @@ def handle_pots_interaction args
   end
 end
 
+def handle_pots_hovering args
+  args.state.pots.each do |pot|
+    if pot.mouse_over? args
+      pot.hover
+    else
+      pot.unhover
+    end
+  end
+end
+
 def add_score_popup args
   args.state.scorepopups << { 
     x: args.inputs.mouse.x,
@@ -59,6 +69,8 @@ def main_scene args
   if args.inputs.mouse.click and not args.state.is_paused
     handle_pots_interaction(args)
   end
+
+  handle_pots_hovering(args)
   
   # Render shelves
   args.outputs.sprites << get_centered_sprite(SHELF_TOP)
