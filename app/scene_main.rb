@@ -43,6 +43,10 @@ def add_score_popup args
   }
 end
 
+def show_pause args
+  args.outputs.labels << PAUSE_TEXT
+end
+
 def main_scene args
   args.state.pots ||= create_pots()
   pots = args.state.pots
@@ -50,8 +54,9 @@ def main_scene args
   args.state.cursor_state ||= :nothing
   args.state.score ||= 0
   args.state.scorepopups ||= []
+  args.state.is_paused ||= false
 
-  if args.inputs.mouse.click
+  if args.inputs.mouse.click and not args.state.is_paused
     handle_pots_interaction(args)
   end
   
@@ -60,25 +65,34 @@ def main_scene args
   args.outputs.sprites << get_centered_sprite(SHELF_BOTTOM)
   
   # Create and render various objects
-  create_reset_button(args)
+  create_pause_button(args)
   create_count_machine(args)
   create_watering_can(args)
   create_seed_bag(args)
 
-  # Run these process on the pots every tick
-  pots.each {|pot| pot.tick}
+  if not args.state.is_paused
+    pots.each {|pot| pot.tick}
+  end
+
   # Render pots
   pots.each {|pot| args.outputs.sprites << pot.sprites }
 
-  # Render and create mouse functionality
-  create_watering_mouse(args)
-  create_seeding_mouse(args)
+  if not args.state.is_paused
+    # Render icons that follow your mouse
+    create_watering_mouse(args)
+    create_seeding_mouse(args)
+  end
 
   args.state.scorepopups.each do |score|
     args.outputs.labels << score
     score.a -= 10
     score.y += 1
     if score.a < 0 then score.a = 0 end
+  end
+
+  # Show pause indicator
+  if args.state.is_paused
+    show_pause(args)
   end
 
   # Remove scorepopups that has already disappeared

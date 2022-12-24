@@ -1,10 +1,20 @@
-RESET_BUTTON = { 
-  x: 100, 
+BOTTOM_LEFT_BUTTON = { 
+  x: 50, 
   y: 100, 
   text: "Reset",
-  alignment_enum: 1,
+  alignment_enum: 0,
   size_enum: 18,
-  font: "fonts/Lato-Regular.ttf",
+  font: "fonts/Mansalva-Regular.ttf",
+}
+
+PAUSE_TEXT = { 
+  x: 640, 
+  y: 420, 
+  text: "Paused",
+  alignment_enum: 1,
+  size_enum: 72,
+  a: 125,
+  font: "fonts/Mansalva-Regular.ttf",
 }
 
 SHELF = {

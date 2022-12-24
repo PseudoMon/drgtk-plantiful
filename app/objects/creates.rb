@@ -1,8 +1,10 @@
+require "app/utils.rb"
+
 def create_watering_can args
   template = WATERING_CAN
   hovered = args.inputs.mouse.inside_rect?(template)
 
-  if hovered and args.inputs.mouse.click
+  if hovered and args.inputs.mouse.click and not args.state.is_paused
     cursor_state = args.state.cursor_state
     
     if cursor_state == :watering
@@ -24,7 +26,7 @@ def create_seed_bag args
   template = SEED_BAG
   hovered = args.inputs.mouse.inside_rect?(template)
 
-  if hovered and args.inputs.mouse.click
+  if hovered and args.inputs.mouse.click and not args.state.is_paused
     cursor_state = args.state.cursor_state
 
     if cursor_state == :seeding
@@ -47,23 +49,22 @@ def create_count_machine args
 end
 
 def create_reset_button args
-  boundbox = get_label_bounding_box(args, RESET_BUTTON)
-  boundbox_hovered = args.inputs.mouse.inside_rect?(boundbox) 
+  reset_button = BOTTOM_LEFT_BUTTON.merge({ text: "Reset" })
 
-  if boundbox_hovered
-    RESET_BUTTON.a = 120
-  else
-    RESET_BUTTON.a = 255
-  end
-
-  if boundbox_hovered and args.inputs.mouse.click
+  create_button(args, reset_button) do
     pots = args.state.pots
     pots.each do |pot|
       pot.remove_plant
     end
   end
+end
 
-  args.outputs.labels << RESET_BUTTON
+def create_pause_button args
+  pause_button = BOTTOM_LEFT_BUTTON.merge({ text: "Pause" })
+
+  create_button(args, pause_button) do
+    args.state.is_paused = !args.state.is_paused
+  end
 end
 
 def create_pots 
