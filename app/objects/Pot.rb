@@ -4,9 +4,9 @@ class Pot
 	@@potwidth = 155
 
 	# starting counter for each phase
-	@@to_wilted_starts = [0, 9999, 8 * 60, 6 * 60, 255, 8 * 50]
+	@@to_wilted_starts = [0, 9999, 9 * 60, 7 * 60, 9 * 60, 10 * 50]
 
-	@@to_growth_starts = [0, 5 * 60, 8 * 60, 12 * 60, 15 * 60, 0]
+	@@to_growth_starts = [0, 5 * 60, 8 * 60, 12 * 60, 12 * 60, 0]
 
 	def initialize template, plant_templates=[], hover_template={}, hand_template={}
 		# template must be hash with { path, w, h }
