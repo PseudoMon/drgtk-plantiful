@@ -27,15 +27,35 @@ START_BUTTON = {
   a: 255,
 }
 
-ABOUT_BUTTON = START_BUTTON.merge({
-  text: "About",
-  y: START_BUTTON.y - 60,
-})
+# Currently unused
+# ABOUT_BUTTON = START_BUTTON.merge({
+#   text: "About",
+#   y: START_BUTTON.y - 60,
+# })
+
+ABOUT_TEXT = {
+  x: 640,
+  y: 120,
+  text: "Made by PseudoMon and miasmig",
+  alignment_enum: 1,
+  size_enum: 10,
+  font: "fonts/Mansalva-Regular.ttf",
+}
+
+URL_TEXT = {
+  x: 640,
+  y: 70,
+  text: "https://github.com/PseudoMon/drgtk-plantiful",
+  alignment_enum: 1,
+  size_enum: 6,
+  font: "fonts/Mansalva-Regular.ttf",
+}
 
 QUIT_BUTTON = START_BUTTON.merge({
   text: "Quit",
   y: START_BUTTON.y - 60,
 })
+
 
 def title_scene args 
   create_button(args, START_BUTTON) do
@@ -52,4 +72,6 @@ def title_scene args
 
   args.outputs.labels << TITLE_TEXT
   args.outputs.sprites << LOGO
+  args.outputs.labels << ABOUT_TEXT
+  args.outputs.labels << URL_TEXT
 end

@@ -4,7 +4,7 @@ devid=pseudomon
 devtitle=PseudoMon
 gameid=plantiful
 gametitle=Plantiful
-version=0.9
+version=0.9.1
 icon=sprites/logo.png
 
 # === Flags available at all licensing tiers ===
