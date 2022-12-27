@@ -2,90 +2,7 @@ require "app/utils.rb"
 require "app/objects/templates.rb"
 require "app/objects/Pot.rb"
 require "app/objects/creates.rb"
-
-def handle_pots_interaction args
-  pots = args.state.pots
-  
-  pots.each do |pot|
-    if pot.mouse_over? args
-
-      case args.state.cursor_state
-      when :watering
-        if pot.is_there_plant?
-          pot.reset_wilting_status
-        end
-
-      when :nothing
-        if pot.is_plant_fully_grown?
-          pot.remove_plant
-          args.state.score += 1
-          add_score_popup(args)
-        end
-
-      when :seeding
-        if !pot.is_there_plant?
-          pot.grow_plant
-        end
-      end
-
-    end
-  end
-end
-
-def handle_pots_hovering args
-  args.state.pots.each do |pot|
-    if pot.mouse_over? args
-      pot.hover
-    else
-      pot.unhover
-    end
-  end
-end
-
-def add_score_popup args
-  args.state.scorepopups << { 
-    x: args.inputs.mouse.x,
-    y: args.inputs.mouse.y + 40,
-    text: "+1",
-    size_enum: 24,
-    r: 106,
-    g: 165,
-    b: 58,
-    a: 255,
-    font: "fonts/Mansalva-Regular.ttf",
-  }
-end
-
-def add_frowny_popup args, x, y
-  args.state.scorepopups << {
-    x: x + POT.w / 2,
-    y: y + POT.h / 2 + 20,
-    text: ":(",
-    size_enum: 24,
-    r: 255,
-    g: 50,
-    b: 50,
-    a: 255,
-    angle: 90,
-    font: "fonts/Mansalva-Regular.ttf",
-  }
-end
-
-def clear_scene args
-  args.state.pots = nil
-  args.state.cursor_state = nil
-  args.state.score = nil
-  args.state.scorepopups = nil
-  args.state.is_paused = nil
-end
-
-def show_pause args
-  args.outputs.labels << PAUSE_TEXT
-  create_button(args, RETURN_TO_MENU) do
-    clear_scene(args)
-    args.state.current_scene = :Title
-  end
-end
+require "app/helpers_main.rb"
 
 def main_scene args
   args.state.pots ||= create_pots(proc do |x, y| 
@@ -95,7 +12,7 @@ def main_scene args
 
   args.state.cursor_state ||= :nothing
   args.state.score ||= 0
-  args.state.scorepopups ||= []
+  args.state.plopups ||= []
   args.state.is_paused ||= false
 
   if args.inputs.mouse.click and not args.state.is_paused
@@ -129,7 +46,7 @@ def main_scene args
     create_seeding_mouse(args)
   end
 
-  args.state.scorepopups.each do |score|
+  args.state.plopups.each do |score|
     args.outputs.labels << score
     score.a -= 10
     score.y += 1
@@ -137,7 +54,7 @@ def main_scene args
   end
 
   # Remove scorepopups that has already disappeared
-  args.state.scorepopups.select! {|score| score.a > 0}
+  args.state.plopups.select! {|score| score.a > 0}
 
   # Show pause screen
   # Note that this needs to be at the bottom because it's
